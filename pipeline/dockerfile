@@ -15,8 +15,8 @@ ENV PATH="/code/.venv/bin:$PATH"
 COPY  .python-version pyproject.toml uv.lock ./
 RUN uv sync --locked
 
-COPY  etl_pipeline.py /code/
+COPY  ingest_data.py /code/
 
 ## providing the commands for entry point
 
-ENTRYPOINT ["python" , "etl_pipeline.py" , "12" ]
+ENTRYPOINT ["python" , "ingest_data.py"]
