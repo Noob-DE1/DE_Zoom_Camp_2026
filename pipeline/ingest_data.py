@@ -1,6 +1,7 @@
+import click
 import pandas as pd
 from sqlalchemy import create_engine
-from tqdm .auto import tqdm
+from tqdm.auto import tqdm
 
 
 dtype = {
@@ -56,17 +57,19 @@ def ingest_data(url, dtype, parse_dates, chunksize,engine,target_table) -> pd.Da
 
     print(f"Data ingestion completed successfully to Postgres database table = {target_table}")
 
-def main():
-    year = 2021
-    month = 1
-    pg_user = "root"
-    pg_password = "root"
-    pg_host = "localhost"
-    pg_port = 5432
-    db_name = "ny_taxi"
-    target_table = "yellow_taxi_data"
-    chunksize = 100000
+@click.command()
+@click.option('--year', type=int, default=2021, help='Year of the data')
+@click.option('--month', type=int, default=1, help='Month of the data')
+@click.option('--pg-user', type=str, default='root', help='PostgreSQL username')
+@click.option('--pg-password', type=str, default='root', help='PostgreSQL password')
+@click.option('--pg-host', type=str, default='localhost', help='PostgreSQL host')
+@click.option('--pg-port', type=int, default=5432, help='PostgreSQL port')
+@click.option('--db-name', type=str, default='ny_taxi', help='Database name')
+@click.option('--target-table', type=str, default='yellow_taxi_data', help='Target table name')
+@click.option('--chunksize', type=int, default=100000, help='Chunk size for data ingestion')
 
+def main(year, month, pg_user, pg_password, pg_host, pg_port, db_name, target_table, chunksize):
+    """Ingest NYC taxi data into PostgreSQL database."""
     engine = create_engine(f'postgresql://{pg_user}:{pg_password}@{pg_host}:{pg_port}/{db_name}')
 
     prefix = "https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow" 
