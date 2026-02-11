@@ -1,0 +1,20 @@
+## pulling the base image from building our continer
+
+FROM python:3.13-slim
+
+## copying uv for docker container vm setput from git uv reposetory
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/
+
+## mentioning the working directory inside the container
+
+WORKDIR /code
+
+COPY  .python-version pyproject.toml uv.lock ./
+RUN uv sync --locked
+
+COPY  etl_pipeline.py /code/
+
+## providing the commands for entry point
+
+ENTRYPOINT [ "uv","run", "python" , "etl_pipeline.py" , "12" ]
