@@ -1,3 +1,7 @@
+#pyright: reportMissingImports=false
+import warnings
+warnings.filterwarnings("ignore")
+
 import click
 import pandas as pd
 from sqlalchemy import create_engine
